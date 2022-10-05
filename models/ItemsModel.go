@@ -5,6 +5,6 @@ type Item struct {
 	ItemCode    string `json:"itemCode" gorm:"not null;unique;type:VARCHAR(50)"`
 	Description string `json:"description" gorm:"type:TEXT"`
 	Quantity    int    `json:"quantity" gorm:"not null"`
-	OrderId     string `gorm:"not null;unique;type:VARCHAR(50)"`
-	Orders      Order  `json:"-" gorm:"foreignKey:ID;constraint:onUpdate:CASCADE,onDelete:CASCADE;many2many:order_items"`
+	OrderId     string `json:"-" gorm:"not null;type:VARCHAR(50)"`
+	Orders      Order  `json:"-" gorm:"foreignKey:OrderId;constraint:onUpdate:CASCADE,onDelete:CASCADE"`
 }
