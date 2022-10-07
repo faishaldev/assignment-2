@@ -1,44 +1,70 @@
 package controllers
 
 import (
-	"assignment-2/models"
+	. "assignment-2/models"
+	. "assignment-2/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func PostOrder(ctx *gin.Context) {
-	var order models.Order
+	var order Order
 
 	if err := ctx.ShouldBind(&order); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 
 		return
 	}
 
-	newOrder := models.Order{OrderedAt: order.OrderedAt, CustomerName: order.CustomerName, Items: order.Items}
+	newOrder := Order{CustomerName: order.CustomerName, Items: order.Items}
 
-	models.GetDb().Create(&newOrder)
+	CreateOrder(&newOrder)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": newOrder})
 }
 
 func GetOrders(ctx *gin.Context) {
-	var orders []models.Order
+	var db = GetDb()
+	var orders []Order
 
-	models.GetDb().Model(&models.Order{}).Preload("Items").Find(&orders)
+	db.Model(&Order{}).Preload("Items").Find(&orders)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
-// func PutOrder(ctx *gin.Context) {
-// 	var order models.Order
+func PutOrder(ctx *gin.Context) {
+	var db = GetDb()
+	var order Order
 
-// 	if err := models.GetDb().Where("id = ?", ctx.Param("id")).First(&order).Error; err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H("error": "Record not found"))
+	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+
+		return
+	}
+
+	if err := ctx.ShouldBindJSON(&order); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		return
+	}
+
+	updatedOrder := db.Model(&order).Association("Items").Updates(Order{})
+
+	ctx.JSON(http.StatusOK, gin.H{"data": updatedOrder})
+}
+
+// func DeleteOrder(ctx *gin.Context) {
+// 	var db = GetDb()
+// 	var order Order
+
+// 	if err := db.Where("order_id = ?", ctx.Param("id")).First(&order).Error; err != nil {
+// 		ctx.JSON(http.StatusNotFound, gin.H{"code": http.StatusNotFound, "status": "NOT_FOUND", "message": err.Error()})
 
 // 		return
 // 	}
 
-// 	var
+// 	db.Delete(order)
+
+// 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 // }
