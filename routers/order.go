@@ -9,7 +9,7 @@ import (
 func OrderRouter(router gin.Engine) *gin.Engine {
 	router.POST("/orders", PostOrder)
 	router.GET("/orders", GetOrders)
-	router.PUT("/orders/:orderId", PutOrderById)
+	// router.PUT("/orders/:orderId", PutOrderById)
 
 	return &router
 }

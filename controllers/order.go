@@ -31,14 +31,14 @@ func GetOrders(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
-func PutOrder(ctx *gin.Context) {
-	var order models.Order
+// func PutOrder(ctx *gin.Context) {
+// 	var order models.Order
 
-	if err := models.GetDb().Where("id = ?", ctx.Param("id")).First(&order).Error; err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H("error": "Record not found"))
+// 	if err := models.GetDb().Where("id = ?", ctx.Param("id")).First(&order).Error; err != nil {
+// 		ctx.JSON(http.StatusBadRequest, gin.H("error": "Record not found"))
 
-		return
-	}
+// 		return
+// 	}
 
-	var 
-}
+// 	var
+// }
