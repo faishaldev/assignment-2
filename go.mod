@@ -3,6 +3,7 @@ module assignment-2
 go 1.19
 
 require (
+	github.com/gin-gonic/gin v1.8.1
 	github.com/joho/godotenv v1.4.0
 	gorm.io/driver/postgres v1.3.10
 	gorm.io/gorm v1.23.7
@@ -10,7 +11,6 @@ require (
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
