@@ -120,12 +120,6 @@ func PutOrder(ctx *gin.Context) {
 	order := models.Order{}
 	item := models.Item{}
 
-	// if err := ctx.ShouldBind(&order); err != nil {
-	// 	ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-
-	// 	return
-	// }
-
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 
@@ -178,7 +172,7 @@ func PutOrder(ctx *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
-// @Success 200 {array} Order
+// @Success 200 string
 // @Router /orders [delete]
 func DeleteOrder(ctx *gin.Context) {
 	db := models.GetDb()
