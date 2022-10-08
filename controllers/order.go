@@ -10,8 +10,8 @@ import (
 )
 
 func PostOrder(ctx *gin.Context) {
-	var db = database.GetDb()
-	var order models.Order
+	db := database.GetDb()
+	order := models.Order{}
 
 	if err := ctx.ShouldBind(&order); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
@@ -21,23 +21,37 @@ func PostOrder(ctx *gin.Context) {
 
 	newOrder := models.Order{CustomerName: order.CustomerName, Items: order.Items}
 
-	db.Create(&newOrder)
+	if err := db.Create(&newOrder).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": newOrder})
 }
 
 func GetOrders(ctx *gin.Context) {
-	var db = database.GetDb()
-	var orders []models.Order
+	db := database.GetDb()
+	orders := []models.Order{}
 
-	db.Model(&models.Order{}).Preload("Items").Find(&orders)
+	if err := ctx.ShouldBind(&orders); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+
+		return
+	}
+
+	if err := db.Model(&models.Order{}).Preload("Items").Find(&orders).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
 func PutOrder(ctx *gin.Context) {
-	var db = database.GetDb()
-	var order models.Order
+	db := database.GetDb()
+	order := models.Order{}
 
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
@@ -45,19 +59,19 @@ func PutOrder(ctx *gin.Context) {
 		return
 	}
 
-	if err := ctx.ShouldBindJSON(&order); err != nil {
+	if err := ctx.ShouldBind(&order); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 
 		return
 	}
 
-	db.Model(&order).Updates(models.Order{CustomerName: order.CustomerName})
+	db.Model(&order).Updates(&order)
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "update success"})
+	ctx.JSON(http.StatusOK, gin.H{"message": order})
 }
 
 func DeleteOrder(ctx *gin.Context) {
-	var db = database.GetDb()
+	db := database.GetDb()
 	var order models.Order
 
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
