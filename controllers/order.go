@@ -39,10 +39,10 @@ func PostOrder(ctx *gin.Context) {
 		return
 	}
 
-	addedItem := make([]resources.Item, len(newOrder.Items))
+	addedItems := make([]resources.Item, len(newOrder.Items))
 
 	for i, _ := range newOrder.Items {
-		addedItem[i] = resources.Item{
+		addedItems[i] = resources.Item{
 			Description: newOrder.Items[i].Description,
 			ItemID:      newOrder.Items[i].ID,
 			Quantity:    newOrder.Items[i].Quantity,
@@ -51,7 +51,7 @@ func PostOrder(ctx *gin.Context) {
 
 	addedOrder := resources.Order{
 		CustomerName: newOrder.CustomerName,
-		Items:        addedItem,
+		Items:        addedItems,
 		ID:           newOrder.ID,
 		OrderedAt:    newOrder.OrderedAt,
 	}
