@@ -53,27 +53,36 @@ func PutOrder(ctx *gin.Context) {
 	order := models.Order{}
 	item := models.Item{}
 
-	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
-
-		return
-	}
-
 	if err := ctx.ShouldBind(&order); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 
 		return
 	}
 
-	db.Unscoped().Where("order_id = ?", order.ID).Delete(item)
-	db.Save(order)
+	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+
+		return
+	}
+
+	if err := db.Unscoped().Where("order_id = ?", order.ID).Delete(item).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+
+		return
+	}
+
+	if err := db.Save(order).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "update order success", "data": order})
 }
 
 func DeleteOrder(ctx *gin.Context) {
 	db := models.GetDb()
-	var order models.Order
+	order := models.Order{}
 
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
@@ -81,7 +90,11 @@ func DeleteOrder(ctx *gin.Context) {
 		return
 	}
 
-	db.Select(clause.Associations).Delete(&order)
+	if err := db.Select(clause.Associations).Delete(&order).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "delete order success"})
 }
