@@ -7,6 +7,6 @@ import (
 type Order struct {
 	CustomerName string    `json:"customerName"`
 	Items        []Item    `json:"items"`
-	ID           uint      `json:"orderId" validate:"required"`
+	ID           uint      `json:"orderId"`
 	OrderedAt    time.Time `json:"orderedAt"`
 }
