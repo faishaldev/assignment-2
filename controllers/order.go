@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"assignment-2/models"
 	database "assignment-2/models"
-	models "assignment-2/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
