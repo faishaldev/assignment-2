@@ -30,7 +30,7 @@ func PostOrder(ctx *gin.Context) {
 }
 
 func GetOrders(ctx *gin.Context) {
-	db := database.GetDb()
+	db := models.GetDb()
 	orders := []models.Order{}
 
 	if err := ctx.ShouldBind(&orders); err != nil {
@@ -49,7 +49,7 @@ func GetOrders(ctx *gin.Context) {
 }
 
 func PutOrder(ctx *gin.Context) {
-	db := database.GetDb()
+	db := models.GetDb()
 	order := models.Order{}
 	item := models.Item{}
 
@@ -72,7 +72,7 @@ func PutOrder(ctx *gin.Context) {
 }
 
 func DeleteOrder(ctx *gin.Context) {
-	db := database.GetDb()
+	db := models.GetDb()
 	var order models.Order
 
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
