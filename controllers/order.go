@@ -65,7 +65,8 @@ func PutOrder(ctx *gin.Context) {
 		return
 	}
 
-	db.Model(&order).Updates(&order)
+	db.Unscoped().Where("order_id = ?", order.ID).Delete(models.Item{})
+	db.Save(order)
 
 	ctx.JSON(http.StatusOK, gin.H{"message": order})
 }
