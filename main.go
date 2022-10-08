@@ -1,3 +1,14 @@
+// @title Orders API
+// @version 1.0.0
+// @description Simple Orders API
+// @termsOfService http://swagger.io/terms
+// @contact.name Musthafa Faishal
+// @contact.email musthafafaisha@gmail.com
+// @license.name Apache 2.0
+// license.url http://www.apache.org/licenses/LICENSE-
+// @host localhost:8080
+// @BasePath /
+
 package main
 
 import (
