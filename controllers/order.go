@@ -27,7 +27,7 @@ func PostOrder(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": newOrder})
+	ctx.JSON(http.StatusOK, gin.H{"message": "add order success", "data": newOrder})
 }
 
 func GetOrders(ctx *gin.Context) {
@@ -52,6 +52,7 @@ func GetOrders(ctx *gin.Context) {
 func PutOrder(ctx *gin.Context) {
 	db := database.GetDb()
 	order := models.Order{}
+	item := models.Item{}
 
 	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
@@ -65,10 +66,10 @@ func PutOrder(ctx *gin.Context) {
 		return
 	}
 
-	db.Unscoped().Where("order_id = ?", order.ID).Delete(models.Item{})
+	db.Unscoped().Where("order_id = ?", order.ID).Delete(item)
 	db.Save(order)
 
-	ctx.JSON(http.StatusOK, gin.H{"message": order})
+	ctx.JSON(http.StatusOK, gin.H{"message": "update order success", "data": order})
 }
 
 func DeleteOrder(ctx *gin.Context) {
@@ -83,5 +84,5 @@ func DeleteOrder(ctx *gin.Context) {
 
 	db.Select(clause.Associations).Delete(&order)
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "delete success"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "delete order success"})
 }
