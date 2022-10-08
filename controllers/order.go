@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"assignment-2/models"
-	database "assignment-2/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +9,7 @@ import (
 )
 
 func PostOrder(ctx *gin.Context) {
-	db := database.GetDb()
+	db := models.GetDb()
 	order := models.Order{}
 
 	if err := ctx.ShouldBind(&order); err != nil {
