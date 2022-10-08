@@ -1,25 +1,23 @@
 package services
 
 import (
-	"assignment-2/models"
+	. "assignment-2/models"
+
+	"gorm.io/gorm/clause"
 )
 
-func CreateOrder(newOrder *models.Order) error {
-	db := models.GetDb()
+func CreateOrder(newOrder *Order) error {
+	db := GetDb()
 
 	err := db.Create(newOrder).Error
 
 	return err
 }
 
-func UpdateOrder(payload *models.Order) error {
-	var db = models.GetDb()
-	var order models.Order
+func DeleteOrder(order *Order) error {
+	var db = GetDb()
 
-	order.CustomerName = payload.CustomerName
-	order.Items = payload.Items
-
-	err := db.Model(&order).Updates(order).Error
+	err := db.Select(clause.Associations).Delete(&order).Error
 
 	return err
 }

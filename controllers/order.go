@@ -2,7 +2,7 @@ package controllers
 
 import (
 	. "assignment-2/models"
-	. "assignment-2/services"
+	"assignment-2/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func PostOrder(ctx *gin.Context) {
 
 	newOrder := Order{CustomerName: order.CustomerName, Items: order.Items}
 
-	CreateOrder(&newOrder)
+	services.CreateOrder(&newOrder)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": newOrder})
 }
@@ -49,22 +49,22 @@ func PutOrder(ctx *gin.Context) {
 		return
 	}
 
-	updatedOrder := db.Model(&order).Association("Items").Updates(Order{})
+	updatedOrder := db.Model(&order).Preload("Items").Updates(&order)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": updatedOrder})
 }
 
-// func DeleteOrder(ctx *gin.Context) {
-// 	var db = GetDb()
-// 	var order Order
+func DeleteOrder(ctx *gin.Context) {
+	var db = GetDb()
+	var order Order
 
-// 	if err := db.Where("order_id = ?", ctx.Param("id")).First(&order).Error; err != nil {
-// 		ctx.JSON(http.StatusNotFound, gin.H{"code": http.StatusNotFound, "status": "NOT_FOUND", "message": err.Error()})
+	if err := db.Where("order_id = ?", ctx.Param("orderId")).First(&order).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 
-// 		return
-// 	}
+		return
+	}
 
-// 	db.Delete(order)
+	services.DeleteOrder(&order)
 
-// 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
-// }
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
