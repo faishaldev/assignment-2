@@ -9,13 +9,13 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// PostOrder godoc
+// PostOrder godocgo
 // @Summary Create new order
 // @Description Create new order
 // @Tags orders
 // @Accept json
 // @Produce json
-// @Success 200 {array} Order
+// @Success 200 {array} models.Order
 // @Router /orders [post]
 func PostOrder(ctx *gin.Context) {
 	db := models.GetDb()
@@ -65,7 +65,7 @@ func PostOrder(ctx *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
-// @Success 200 {array} Order
+// @Success 200 {array} models.Order
 // @Router /orders [get]
 func GetOrders(ctx *gin.Context) {
 	db := models.GetDb()
@@ -113,7 +113,7 @@ func GetOrders(ctx *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
-// @Success 200 {array} Order
+// @Success 200 {array} models.Order
 // @Router /orders [put]
 func PutOrder(ctx *gin.Context) {
 	db := models.GetDb()
@@ -172,7 +172,7 @@ func PutOrder(ctx *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
-// @Success 200 string
+// @Success 200 string gin.H
 // @Router /orders [delete]
 func DeleteOrder(ctx *gin.Context) {
 	db := models.GetDb()

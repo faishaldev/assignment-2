@@ -1,17 +1,7 @@
-// @title Orders API
-// @version 1.0.0
-// @description Simple Orders API
-// @termsOfService http://swagger.io/terms
-// @contact.name Musthafa Faishal
-// @contact.email musthafafaisha@gmail.com
-// @license.name Apache 2.0
-// license.url http://www.apache.org/licenses/LICENSE-
-// @host localhost:8080
-// @BasePath /
-
 package main
 
 import (
+	_ "assignment-2/docs"
 	db "assignment-2/models"
 	"assignment-2/routers"
 	"log"
@@ -20,6 +10,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @title Orders API
+// @version 1.0.0
+// @description Simple Orders API
+// @termsOfService http://swagger.io/terms
+// @contact.name musshal
+// @contact.email musthafafaisha@gmail.com
+// @license.name Apache 2.0
+// license.url http://www.apache.org/licenses/LICENSE-
+// @host localhost:8080
+// @BasePath /
 func main() {
 	db.Init()
 
